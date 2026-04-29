@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 
 // setup template engine
 app.set('view engine', 'ejs');
-app.set('views', './views');
+app.set('views', './view');
 
 // serving file statis dari folder public
 app.use(express.static('public'));
