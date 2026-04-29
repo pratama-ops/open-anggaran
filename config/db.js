@@ -14,7 +14,7 @@ const connectDB = async () => {
 
   while (retries) {
     try {
-      await pool.connect();
+      await pool.query('SELECT 1'); // ⬅️ ganti ini
       console.log('✅ PostgreSQL connected');
       break;
     } catch (err) {
