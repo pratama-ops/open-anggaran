@@ -12,13 +12,13 @@ const dashboardMod = {
     //ambil total jumlah data untuk pagination & statistik
     getCount: async () => {
         const result = await pool.query(`SELECT COUNT(*) FROM pengadaan`);
-        return parseInt(result.rows[0].sum); //pakai parseint karena ada query 'count'
+        return parseInt(result.rows[0].count); //pakai parseint karena ada query 'count'
     },
 
     //ambil total nilai pagu seluruhnya
     getTotalPagu: async () => {
         const result = await pool.query(`SELECT SUM(pagu_rp) FROM pengadaan`);
-        return parseInt(result.rows[0].sum); //pakai parseint karena ada query 'sum'
+        return result.rows[0].sum; //pakai parseint karena ada query 'sum'
     },
 };
 
