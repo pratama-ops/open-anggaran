@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= pengadaan.nama_paket %> — Open Anggaran</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-950 text-gray-100 min-h-screen">
+
+  <!-- navbar -->
+  <nav class="bg-gray-900 border-b border-gray-800 px-6 py-4 flex items-center justify-between">
+    <span class="text-blue-400 font-bold text-xl tracking-tight">Open Anggaran</span>
+    <a href="/" class="text-gray-400 text-sm hover:text-white transition-colors">← Kembali</a>
+  </nav>
+
+  <main class="max-w-4xl mx-auto px-6 py-8">
+
+    <!-- info paket -->
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
+      <h1 class="text-xl font-bold text-white mb-6"><%= pengadaan.nama_paket %></h1>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div>
+          <p class="text-gray-400 mb-1">Nilai Pagu</p>
+          <p class="text-blue-400 font-bold text-2xl">
+            Rp <%= parseInt(pengadaan.pagu_rp).toLocaleString('id-ID') %>
+          </p>
+        </div>
+        <div>
+          <p class="text-gray-400 mb-1">Metode</p>
+          <p class="text-gray-100"><%= pengadaan.metode %></p>
+        </div>
+        <div>
+          <p class="text-gray-400 mb-1">Jenis Pengadaan</p>
+          <p class="text-gray-100"><%= pengadaan.jenis_pengadaan %></p>
+        </div>
+        <div>
+          <p class="text-gray-400 mb-1">K/L/PD</p>
+          <p class="text-gray-100"><%= pengadaan.klpd %></p>
+        </div>
+        <div>
+          <p class="text-gray-400 mb-1">Satuan Kerja</p>
+          <p class="text-gray-100"><%= pengadaan.satuan_kerja %></p>
+        </div>
+        <div>
+          <p class="text-gray-400 mb-1">Lokasi</p>
+          <p class="text-gray-100"><%= pengadaan.lokasi %></p>
+        </div>
+        <div>
+          <p class="text-gray-400 mb-1">Pemilihan</p>
+          <p class="text-gray-100"><%= pengadaan.pemilihan %></p>
+        </div>
+        <div>
+          <p class="text-gray-400 mb-1">SIRUP ID</p>
+          <p class="text-gray-100"><%= pengadaan.sirup_id %></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- section analisis AI -->
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-semibold text-gray-100">Analisis AI</h2>
+        <% if (!analysis) { %>
+        <button id="btnAnalisis"
+          onclick="jalankanAnalisis('<%= pengadaan.id %>')"
+          class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm font-medium transition-colors">
+          Jalankan Analisis
+        </button>
+        <% } %>
+      </div>
+
+      <% if (analysis) { %>
+        <!-- hasil analisis sudah ada -->
+        <div class="mb-3">
+          <span class="px-3 py-1 rounded-full text-xs font-semibold
+            <%= analysis.status === 'normal' ? 'bg-green-900 text-green-300' :
+                analysis.status === 'perlu_perhatian' ? 'bg-yellow-900 text-yellow-300' :
+                'bg-red-900 text-red-300' %>">
+            <%= analysis.status.replace('_', ' ').toUpperCase() %>
+          </span>
+        </div>
+        <p class="text-gray-300 text-sm leading-relaxed"><%= analysis.insight %></p>
+        <p class="text-gray-600 text-xs mt-4">
+          Dianalisis: <%= new Date(analysis.analyzed_at).toLocaleString('id-ID') %>
+        </p>
+      <% } else { %>
+        <!-- belum dianalisis -->
+        <div id="statusAnalisis" class="text-gray-500 text-sm">
+          Belum dianalisis. Klik tombol untuk menjalankan analisis AI.
+        </div>
+      <% } %>
+    </div>
+
+  </main>
+
+  <script>
+    async function jalankanAnalisis(id) {
+      const btn = document.getElementById('btnAnalisis');
+      const status = document.getElementById('statusAnalisis');
+
+      btn.disabled = true;
+      btn.textContent = 'Menganalisis...';
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+      status.textContent = 'AI sedang menganalisis data, mohon tunggu...';
+
+      try {
+        const res = await fetch(`/analisis/${id}`, { method: 'POST' });
+        const data = await res.json();
+
+        if (data.success) {
+          // reload halaman untuk tampilkan hasil
+          window.location.reload();
+        } else {
+          status.textContent = 'Gagal menganalisis. Coba lagi.';
+          btn.disabled = false;
+          btn.textContent = 'Jalankan Analisis';
+          btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+      } catch (err) {
+        status.textContent = 'Terjadi kesalahan. Coba lagi.';
+        btn.disabled = false;
+        btn.textContent = 'Jalankan Analisis';
+        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    }
+  </script>
+
+</body>
+</html>
