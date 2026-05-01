@@ -1,5 +1,4 @@
 const { pool } = require('../../config/db');
-console.log("POOL DEBUG:", pool);
 
 const dashboardMod = {
     //ambil semua data dengan pagination
