@@ -7,6 +7,9 @@ services:
       - .env
     depends_on:
       - db
+    volumes:
+      - /Users/macpro2017/projek-open-anggaran:/app
+      - /app/node_modules
 
   db:
     image: postgres:15
@@ -14,7 +17,7 @@ services:
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: E011010pratama
-      POSTGRES_DB: open_anggaran
+      POSTGRES_DB: open_anggaran  
     ports:
       - "5432:5432"
     volumes:
