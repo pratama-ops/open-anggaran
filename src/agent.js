@@ -8,6 +8,7 @@ async function analyze(id) {
     const paket = paketResult.rows[0];
     if (!paket) throw new Error('Paket tidak ditemukan!!');
 
+    //hitung rata rata
     const rataRataResult = await pool.query(
         `SELECT AVG(pagu_rp) as rata FROM pengadaan WHERE jenis_pengadaan = $1`,
         [paket.jenis_pengadaan]
