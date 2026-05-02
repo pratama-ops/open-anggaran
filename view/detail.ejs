@@ -9,69 +9,70 @@
 <body class="bg-gray-950 text-gray-100 min-h-screen">
 
   <!-- navbar -->
-  <nav class="bg-gray-900 border-b border-gray-800 px-6 py-4 flex items-center justify-between">
-    <span class="text-blue-400 font-bold text-xl tracking-tight">Open Anggaran</span>
-    <a href="/" class="text-gray-400 text-sm hover:text-white transition-colors">← Kembali</a>
+  <nav class="bg-gray-900 border-b border-gray-800 px-4 md:px-6 py-4 flex items-center justify-between">
+    <span class="text-blue-400 font-bold text-lg md:text-xl tracking-tight">Open Anggaran</span>
+    <a href="/" class="text-gray-400 text-xs md:text-sm hover:text-white transition-colors">← Kembali</a>
   </nav>
 
-  <main class="max-w-4xl mx-auto px-6 py-8">
+  <main class="max-w-4xl mx-auto px-4 md:px-6 py-6 md:py-8">
 
     <!-- info paket -->
-    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
-      <h1 class="text-xl font-bold text-white mb-6"><%= pengadaan.nama_paket %></h1>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-        <div>
-          <p class="text-gray-400 mb-1">Nilai Pagu</p>
-          <p class="text-blue-400 font-bold text-2xl">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-4 md:p-6 mb-4 md:mb-6">
+      <h1 class="text-base md:text-xl font-bold text-white mb-4 md:mb-6 leading-snug">
+        <%= pengadaan.nama_paket %>
+      </h1>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 text-sm">
+        <div class="col-span-1 md:col-span-2">
+          <p class="text-gray-400 text-xs mb-1">Nilai Pagu</p>
+          <p class="text-blue-400 font-bold text-xl md:text-2xl">
             Rp <%= parseInt(pengadaan.pagu_rp).toLocaleString('id-ID') %>
           </p>
         </div>
         <div>
-          <p class="text-gray-400 mb-1">Metode</p>
-          <p class="text-gray-100"><%= pengadaan.metode %></p>
+          <p class="text-gray-400 text-xs mb-1">Metode</p>
+          <p class="text-gray-100 text-sm"><%= pengadaan.metode %></p>
         </div>
         <div>
-          <p class="text-gray-400 mb-1">Jenis Pengadaan</p>
-          <p class="text-gray-100"><%= pengadaan.jenis_pengadaan %></p>
+          <p class="text-gray-400 text-xs mb-1">Jenis Pengadaan</p>
+          <p class="text-gray-100 text-sm"><%= pengadaan.jenis_pengadaan %></p>
         </div>
         <div>
-          <p class="text-gray-400 mb-1">K/L/PD</p>
-          <p class="text-gray-100"><%= pengadaan.klpd %></p>
+          <p class="text-gray-400 text-xs mb-1">K/L/PD</p>
+          <p class="text-gray-100 text-sm"><%= pengadaan.klpd %></p>
         </div>
         <div>
-          <p class="text-gray-400 mb-1">Satuan Kerja</p>
-          <p class="text-gray-100"><%= pengadaan.satuan_kerja %></p>
+          <p class="text-gray-400 text-xs mb-1">Satuan Kerja</p>
+          <p class="text-gray-100 text-sm"><%= pengadaan.satuan_kerja %></p>
         </div>
         <div>
-          <p class="text-gray-400 mb-1">Lokasi</p>
-          <p class="text-gray-100"><%= pengadaan.lokasi %></p>
+          <p class="text-gray-400 text-xs mb-1">Lokasi</p>
+          <p class="text-gray-100 text-sm"><%= pengadaan.lokasi %></p>
         </div>
         <div>
-          <p class="text-gray-400 mb-1">Pemilihan</p>
-          <p class="text-gray-100"><%= pengadaan.pemilihan %></p>
+          <p class="text-gray-400 text-xs mb-1">Pemilihan</p>
+          <p class="text-gray-100 text-sm"><%= pengadaan.pemilihan %></p>
         </div>
         <div>
-          <p class="text-gray-400 mb-1">SIRUP ID</p>
-          <p class="text-gray-100"><%= pengadaan.sirup_id %></p>
+          <p class="text-gray-400 text-xs mb-1">SIRUP ID</p>
+          <p class="text-gray-100 text-sm"><%= pengadaan.sirup_id %></p>
         </div>
       </div>
     </div>
 
     <!-- section analisis AI -->
-    <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div class="bg-gray-900 border border-gray-800 rounded-xl p-4 md:p-6">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="font-semibold text-gray-100">Analisis AI</h2>
+        <h2 class="font-semibold text-gray-100 text-sm md:text-base">Analisis AI</h2>
         <% if (!analisis) { %>
         <button id="btnAnalisis"
           onclick="jalankanAnalisis('<%= pengadaan.id %>')"
-          class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm font-medium transition-colors">
+          class="px-3 md:px-4 py-1.5 md:py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs md:text-sm font-medium transition-colors">
           Jalankan Analisis
         </button>
         <% } %>
       </div>
 
       <% if (analisis) { %>
-        <!-- hasil analisis sudah ada -->
         <div class="mb-3">
           <span class="px-3 py-1 rounded-full text-xs font-semibold
             <%= analisis.status === 'normal' ? 'bg-green-900 text-green-300' :
@@ -85,7 +86,6 @@
           Dianalisis: <%= new Date(analisis.analyzed_at).toLocaleString('id-ID') %>
         </p>
       <% } else { %>
-        <!-- belum dianalisis -->
         <div id="statusAnalisis" class="text-gray-500 text-sm">
           Belum dianalisis. Klik tombol untuk menjalankan analisis AI.
         </div>
@@ -109,7 +109,6 @@
         const data = await res.json();
 
         if (data.success) {
-          // reload halaman untuk tampilkan hasil
           window.location.reload();
         } else {
           status.textContent = 'Gagal menganalisis. Coba lagi.';
