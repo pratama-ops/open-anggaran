@@ -110,26 +110,34 @@ Buka `http://localhost:3000` di browser.
 ## 📁 Struktur Direktori
 open-anggaran/
 ├── config/
-│   └── db.js          # Koneksi PostgreSQL
+│   └── db.js              # Koneksi PostgreSQL
+│
 ├── src/
 │   ├── controllers/
 │   │   ├── dashboardController.js
 │   │   ├── pengadaanController.js
 │   │   └── agentController.js
+│   │
 │   ├── models/
 │   │   ├── pengadaan.js
 │   │   └── analisis.js
+│   │
 │   ├── routes/
 │   │   └── index.js
+│   │
 │   └── services/
-│       └── csvParser.js     # Import data Excel SiRUP ke database
+│       └── csvParser.js   # Import data Excel SiRUP ke database
+│
 ├── views/
 │   ├── dashboard.ejs
 │   └── detail.ejs
+│
 ├── public/
-├── data/                    # Taruh file Excel SiRUP di sini
-├── agent.js                 # Logic analisis AI
-├── app.js                   # Entry point
+│
+├── data/                  # Taruh file Excel SiRUP di sini
+│
+├── agent.js               # Logic analisis AI
+├── app.js                 # Entry point
 └── .env
 
 ## ⚠️ Keterbatasan
