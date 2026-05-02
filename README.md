@@ -1,51 +1,49 @@
 # Open Anggaran
 
-Aplikasi berbasis AI untuk menganalisis dan memvisualisasikan data pengadaan barang pemerintah dari SiRUP LKPP. Dirancang untuk membantu masyarakat memahami pola harga pengadaan secara objektif — bukan menuduh, tapi memberi insight.
+Aplikasi web berbasis AI untuk membantu publik memahami dan menganalisis pola data pengadaan barang pemerintah Indonesia secara lebih mudah dan transparan. Data bersumber dari **SiRUP LKPP** (Sistem Informasi Rencana Umum Pengadaan).
 
-## Fitur
+> ⚠️ Aplikasi ini tidak menuduh atau menyimpulkan adanya pelanggaran hukum. Analisis AI bersifat indikatif dan tidak menggantikan audit resmi oleh lembaga berwenang.
 
-- **Dashboard Pengadaan** — tampilkan data paket pengadaan barang dari SiRUP LKPP lengkap dengan pagination
-- **Halaman Detail** — lihat informasi lengkap per paket pengadaan
-- **Analisis AI** — deteksi anomali harga menggunakan AI, memberi label `normal`, `perlu_perhatian`, atau `anomali` berdasarkan perbandingan dengan paket sejenis
+## ✨ Fitur
 
-## Tech Stack
+- **Dashboard Pengadaan**: Tampilkan daftar paket pengadaan barang pemerintah dengan pagination
+- **Detail Paket**: Informasi lengkap per paket pengadaan
+- **Analisis AI**: Penilaian kewajaran nilai pagu menggunakan Groq API (Llama 3.3 70B)
+- **Label Status**: Klasifikasi hasil analisis — Normal, Perlu Perhatian, atau Anomali
+- **Responsif**: Dapat diakses dari desktop maupun perangkat mobile
 
-- **Runtime** — Node.js
-- **Framework** — Express.js
-- **Template Engine** — EJS
-- **Database** — PostgreSQL
-- **AI** — Groq API (via fetch)
-- **Styling** — Tailwind CSS (CDN)
+## 🚀 Tech Stack
 
-## Struktur Folder
-open-anggaran/
-├── config/
-│   └── database.js       # koneksi PostgreSQL
-├── src/
-│   ├── controllers/      # logic request & response
-│   ├── models/           # query ke database
-│   ├── routes/           # definisi route
-│   └── services/         # import CSV & komunikasi AI
-├── views/                # template EJS
-│   └── partials/
-├── public/               # file statis (CSS, JS)
-├── data/                 # file Excel SiRUP
-├── agent.js              # AI agent — analisis anomali harga
-└── app.js                # entry point
+- **Backend**: Node.js, Express.js
+- **Database**: PostgreSQL
+- **Template Engine**: EJS
+- **AI**: Groq API (Llama 3.3 70B)
+- **Styling**: Tailwind CSS
 
-## Cara Pakai
+## 📋 Prasyarat
 
-### 1. Clone & Install
+- Node.js v18+
+- PostgreSQL
+- Groq API Key (gratis di [console.groq.com](https://console.groq.com))
+
+## 🛠️ Instalasi
+
+### 1. Clone repository
 
 ```bash
-git clone https://github.com/username/open-anggaran.git
+git clone https://github.com/pratama-ops/open-anggaran.git
 cd open-anggaran
+```
+
+### 2. Install dependencies
+
+```bash
 npm install
 ```
 
-### 2. Setup Environment
+### 3. Setup environment variable
 
-Buat file `.env` berdasarkan `.env.example`:
+Salin `.env.example` menjadi `.env` lalu sesuaikan isinya:
 
 ```env
 PORT=3000
@@ -57,7 +55,7 @@ DB_NAME=open_anggaran
 GROQ_API_KEY=your_groq_api_key
 ```
 
-### 3. Setup Database
+### 4. Buat database
 
 Buat database di PostgreSQL:
 
@@ -84,39 +82,65 @@ CREATE TABLE pengadaan (
   imported_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE analysis (
+CREATE TABLE analisis (
   id SERIAL PRIMARY KEY,
   pengadaan_id INTEGER REFERENCES pengadaan(id),
-  insight TEXT,
   status VARCHAR(50),
+  insight TEXT,
   analyzed_at TIMESTAMP DEFAULT NOW()
 );
 ```
 
-### 4. Import Data
+### 5. Import data SiRUP
 
-Download file Excel dari [SiRUP LKPP](https://sirup.inaproc.id), filter Jenis Pengadaan = Barang, lalu jalankan:
+Download file Excel dari [sirup.lkpp.go.id](https://sirup.lkpp.go.id), pilih filter **Jenis Pengadaan: Barang**, lalu taruh di folder `data/` dan jalankan:
 
 ```bash
 node src/services/csvParser.js data/nama-file.xlsx
 ```
 
-### 5. Jalankan Aplikasi
+### 6. Jalankan aplikasi
 
 ```bash
 npm run dev
 ```
 
-Buka di browser: `http://localhost:3000`
+Buka `http://localhost:3000` di browser.
 
-## Sumber Data
+## 📁 Struktur Direktori
+open-anggaran/
+├── config/
+│   └── db.js          # Koneksi PostgreSQL
+├── src/
+│   ├── controllers/
+│   │   ├── dashboardController.js
+│   │   ├── pengadaanController.js
+│   │   └── agentController.js
+│   ├── models/
+│   │   ├── pengadaan.js
+│   │   └── analisis.js
+│   ├── routes/
+│   │   └── index.js
+│   └── services/
+│       └── csvParser.js     # Import data Excel SiRUP ke database
+├── views/
+│   ├── dashboard.ejs
+│   └── detail.ejs
+├── public/
+├── data/                    # Taruh file Excel SiRUP di sini
+├── agent.js                 # Logic analisis AI
+├── app.js                   # Entry point
+└── .env
 
-Data bersumber dari **SiRUP LKPP** (Sistem Informasi Rencana Umum Pengadaan) yang merupakan data publik yang disediakan oleh Lembaga Kebijakan Pengadaan Barang/Jasa Pemerintah (LKPP).
+## ⚠️ Keterbatasan
 
-## Disclaimer
+- Analisis AI menggunakan pengetahuan umum LLM — belum terintegrasi dengan data harga E-Katalog LKPP secara real-time
+- Akurasi analisis bergantung pada kelengkapan nama paket di data SiRUP
+- Data perlu diupdate manual dengan download ulang dari SiRUP
 
-Aplikasi ini bertujuan untuk transparansi dan edukasi publik. Hasil analisis AI **bukan** merupakan tuduhan pelanggaran hukum. Label `perlu_perhatian` atau `anomali` semata-mata menunjukkan pola yang berbeda dari data sejenis dan perlu dicermati lebih lanjut.
+## 🗺️ Roadmap
 
-## Lisensi
-
-MIT
+- [ ] Integrasi harga E-Katalog LKPP sebagai data pembanding
+- [ ] Fitur pencarian dan filter di dashboard
+- [ ] Analisis batch untuk seluruh dataset sekaligus
+- [ ] Grafik distribusi nilai pagu per kategori
