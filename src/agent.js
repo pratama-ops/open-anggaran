@@ -74,11 +74,12 @@ const parse = JSON.parse(text);
 
 //simpan hasil analisis ke tabel
 await pool.query(
-    `INSERT INTO analisis (pengadaan_id, status, insight)
-     VALUES ($1, $2, $3)
-     ON CONFLICT DO NOTHING`,
-    [id, parse.status, parse.insight]
-  );
+  `INSERT INTO analisis (pengadaan_id, status, insight)
+   VALUES ($1, $2, $3)
+   ON CONFLICT (pengadaan_id) DO UPDATE 
+   SET status = $2, insight = $3, analyzed_at = NOW()`,
+  [id, parse.status, parse.insight]
+);
 
   return parse;
 
