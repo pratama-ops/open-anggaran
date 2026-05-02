@@ -149,6 +149,5 @@ open-anggaran/
 ## 🗺️ Roadmap
 
 - [ ] Integrasi harga E-Katalog LKPP sebagai data pembanding
-- [ ] Fitur pencarian dan filter di dashboard
 - [ ] Analisis batch untuk seluruh dataset sekaligus
 - [ ] Grafik distribusi nilai pagu per kategori
