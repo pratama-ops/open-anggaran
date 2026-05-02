@@ -1,13 +1,13 @@
 const pengadaanMod = require('../model/pengadaan');
-const analisisMod = require('../models/analisis');
+const analisisMod = require('../model/analisis');
 
 const pengadaanCont = {
     detail: async(req, res) => {
         try {
-            const { id } = req.param;
+            const { id } = req.params;
 
             const pengadaan = await pengadaanMod.getById(id);
-            const analisis = await analisisMod.getById(id);
+            const analisis = await analisisMod.getByPengadaanId(id);
 
             if(!pengadaan) return res.status(400).send('Paket tidak ditemukan!!');
 
