@@ -18,6 +18,12 @@
 
   <main class="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8">
 
+    <!-- search -->
+    <div class="mb-4">
+      <input id="searchInput" type="text" placeholder="Cari nama paket..."
+        class="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors" />
+    </div>
+
     <!-- statistik -->
     <div class="grid grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-8">
       <div class="bg-gray-900 border border-gray-800 rounded-xl p-4 md:p-6">
@@ -53,63 +59,93 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-800">
-            <% pengadaan.forEach(item => { %>
-            <tr class="hover:bg-gray-800 transition-colors">
-              <td class="px-4 py-3 text-gray-100 max-w-xs truncate">
-                <a href="/pengadaan/<%= item.id %>" class="hover:text-blue-400 transition-colors">
-                  <%= item.nama_paket %>
-                </a>
-              </td>
-              <td class="px-4 py-3 text-blue-400 font-medium whitespace-nowrap">
-                Rp <%= parseInt(item.pagu_rp).toLocaleString('id-ID') %>
-              </td>
-              <td class="px-4 py-3 text-gray-300"><%= item.metode %></td>
-              <td class="px-4 py-3 text-gray-300 max-w-xs truncate"><%= item.klpd %></td>
-              <td class="px-4 py-3 text-gray-300"><%= item.lokasi %></td>
-            </tr>
-            <% }) %>
+            <% pengadaan.forEach(item=> { %>
+              <tr class="hover:bg-gray-800 transition-colors">
+                <td class="px-4 py-3 text-gray-100 max-w-xs truncate">
+                  <a href="/pengadaan/<%= item.id %>" class="hover:text-blue-400 transition-colors">
+                    <%= item.nama_paket %>
+                  </a>
+                </td>
+                <td class="px-4 py-3 text-blue-400 font-medium whitespace-nowrap">
+                  Rp <%= parseInt(item.pagu_rp).toLocaleString('id-ID') %>
+                </td>
+                <td class="px-4 py-3 text-gray-300">
+                  <%= item.metode %>
+                </td>
+                <td class="px-4 py-3 text-gray-300 max-w-xs truncate">
+                  <%= item.klpd %>
+                </td>
+                <td class="px-4 py-3 text-gray-300">
+                  <%= item.lokasi %>
+                </td>
+              </tr>
+              <% }) %>
           </tbody>
         </table>
       </div>
 
       <!-- tampilan card — mobile only -->
       <div class="md:hidden divide-y divide-gray-800">
-        <% pengadaan.forEach(item => { %>
-        <a href="/pengadaan/<%= item.id %>" class="block px-4 py-4 hover:bg-gray-800 transition-colors">
-          <p class="text-gray-100 font-medium text-sm mb-2 line-clamp-2"><%= item.nama_paket %></p>
-          <p class="text-blue-400 font-bold text-sm mb-2">
-            Rp <%= parseInt(item.pagu_rp).toLocaleString('id-ID') %>
-          </p>
-          <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-400">
-            <span><%= item.metode %></span>
-            <span><%= item.lokasi %></span>
-          </div>
-        </a>
-        <% }) %>
+        <% pengadaan.forEach(item=> { %>
+          <a href="/pengadaan/<%= item.id %>" class="block px-4 py-4 hover:bg-gray-800 transition-colors">
+            <p class="text-gray-100 font-medium text-sm mb-2 line-clamp-2">
+              <%= item.nama_paket %>
+            </p>
+            <p class="text-blue-400 font-bold text-sm mb-2">
+              Rp <%= parseInt(item.pagu_rp).toLocaleString('id-ID') %>
+            </p>
+            <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-400">
+              <span>
+                <%= item.metode %>
+              </span>
+              <span>
+                <%= item.lokasi %>
+              </span>
+            </div>
+          </a>
+          <% }) %>
       </div>
 
       <!-- pagination -->
       <div class="px-4 md:px-6 py-4 border-t border-gray-800 flex items-center justify-between text-sm text-gray-400">
         <span class="text-xs md:text-sm">Halaman <%= halamanSaat %> dari <%= totalHalaman %></span>
         <div class="flex gap-2">
-          <% if (halamanSaat > 1) { %>
-          <a href="/?page=<%= halamanSaat - 1 %>"
-            class="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors text-xs md:text-sm">
-            ← Sebelumnya
-          </a>
-          <% } %>
-          <% if (halamanSaat < totalHalaman) { %>
-          <a href="/?page=<%= halamanSaat + 1 %>"
-            class="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded-lg text-white transition-colors text-xs md:text-sm">
-            Berikutnya →
-          </a>
-          <% } %>
+          <% if (halamanSaat> 1) { %>
+            <a href="/?page=<%= halamanSaat - 1 %>"
+              class="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors text-xs md:text-sm">
+              ← Sebelumnya
+            </a>
+            <% } %>
+              <% if (halamanSaat < totalHalaman) { %>
+                <a href="/?page=<%= halamanSaat + 1 %>"
+                  class="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded-lg text-white transition-colors text-xs md:text-sm">
+                  Berikutnya →
+                </a>
+                <% } %>
         </div>
       </div>
     </div>
 
   </main>
 
-</body>
+  <script>
+    const searchInput = document.getElementById('searchInput');
 
+    searchInput.addEventListener('input', () => {
+      const keyword = searchInput.value.toLowerCase();
+
+      // filter tabel desktop
+      document.querySelectorAll('tbody tr').forEach(row => {
+        const nama = row.querySelector('td')?.textContent.toLowerCase() || '';
+        row.style.display = nama.includes(keyword) ? '' : 'none';
+      });
+
+      // filter card mobile
+      document.querySelectorAll('.md\\:hidden a').forEach(card => {
+        const nama = card.querySelector('p')?.textContent.toLowerCase() || '';
+        card.style.display = nama.includes(keyword) ? '' : 'none';
+      });
+    });
+  </script>
+</body>
 </html>
