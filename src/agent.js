@@ -8,17 +8,25 @@ async function analyze(id) {
     const paket = paketResult.rows[0];
     if (!paket) throw new Error('Paket tidak ditemukan!!');
 
-    //ambil data paket untuk dibandingkan
-//     const paketBanding = await pool.query(
-//   `SELECT nama_paket, pagu_rp, metode, lokasi 
-//    FROM pengadaan 
-//    WHERE nama_paket ILIKE $1 AND id != $2
-//    LIMIT 10`,
-//   [`%${paket.nama_paket.split(' ').slice(0, 3).join('%')}%`, id]
-// );
-//     const bandingResult = paketBanding.rows;
+    const rataRataResult = await pool.query(
+        `SELECT AVG(pagu_rp) as rata FROM pengadaan WHERE jenis_pengadaan = $1`,
+        [paket.jenis_pengadaan]
+    );
 
-//     const rataRata = bandingResult.reduce((sum, p) => sum + parseInt(p.pagu_rp), 0 / bandingResult.length);
+    const rataRata = parseInt(rataRataResult.rows[0].rata); //ambil hasil dari db dan konversi jadi integer
+    const rasio = (parseInt(paket.pagu_rp) / rataRata).toFixed(2); //hitung berapa kali lipat pagu paket dibanding ratarata
+
+    //ambil data paket untuk dibandingkan
+    //     const paketBanding = await pool.query(
+    //   `SELECT nama_paket, pagu_rp, metode, lokasi 
+    //    FROM pengadaan 
+    //    WHERE nama_paket ILIKE $1 AND id != $2
+    //    LIMIT 10`,
+    //   [`%${paket.nama_paket.split(' ').slice(0, 3).join('%')}%`, id]
+    // );
+    //     const bandingResult = paketBanding.rows;
+
+    //     const rataRata = bandingResult.reduce((sum, p) => sum + parseInt(p.pagu_rp), 0 / bandingResult.length);
 
     //susun prompt
     const prompt = `
@@ -42,6 +50,17 @@ Gunakan pemahamanmu tentang:
 2. Harga wajar barang/jasa tersebut di pasar Indonesia
 3. Konteks pengadaan pemerintah (pemeliharaan vs pengadaan baru, skala kecil vs besar, dll)
 
+Konteks data pembanding dari database SiRUP:
+- Rata-rata pagu pengadaan sejenis: Rp ${rataRata.toLocaleString('id-ID')}
+- Rasio pagu paket ini vs rata-rata: ${rasio}x
+
+Kriteria status yang HARUS diikuti:
+- normal: rasio antara 0.5x - 1.5x dari rata-rata
+- perlu_perhatian: rasio antara 1.5x - 3x dari rata-rata
+- anomali: rasio di atas 3x atau di bawah 0.2x dari rata-rata
+
+Gunakan kriteria di atas sebagai acuan utama, bukan intuisi.
+
 Berikan analisis dalam format JSON berikut (langsung JSON, tanpa backtick):
 {
   "status": "normal" | "perlu_perhatian" | "anomali",
@@ -54,34 +73,34 @@ Kriteria status:
 - anomali: nilai pagu sangat tidak wajar untuk konteks barang yang dimaksud
 `;
 
-//kirim ke groq API
-const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
-    },
-    body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.3,
-    }),
-});
+    //kirim ke groq API
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+        },
+        body: JSON.stringify({
+            model: 'llama-3.3-70b-versatile',
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.3,
+        }),
+    });
 
-const data = await response.json();
-const text = data.choices[0].message.content;
-const parse = JSON.parse(text);
+    const data = await response.json();
+    const text = data.choices[0].message.content;
+    const parse = JSON.parse(text);
 
-//simpan hasil analisis ke tabel
-await pool.query(
-  `INSERT INTO analisis (pengadaan_id, status, insight)
+    //simpan hasil analisis ke tabel
+    await pool.query(
+        `INSERT INTO analisis (pengadaan_id, status, insight)
    VALUES ($1, $2, $3)
    ON CONFLICT (pengadaan_id) DO UPDATE 
    SET status = $2, insight = $3, analyzed_at = NOW()`,
-  [id, parse.status, parse.insight]
-);
+        [id, parse.status, parse.insight]
+    );
 
-  return parse;
+    return parse;
 
 }
 
