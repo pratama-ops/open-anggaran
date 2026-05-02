@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><%= pengadaan.nama_paket %> — Open Anggaran</title>
+  <title>
+    <%= pengadaan.nama_paket %> — Open Anggaran
+  </title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-950 text-gray-100 min-h-screen">
 
   <!-- navbar -->
@@ -30,66 +34,86 @@
         </div>
         <div>
           <p class="text-gray-400 text-xs mb-1">Metode</p>
-          <p class="text-gray-100 text-sm"><%= pengadaan.metode %></p>
+          <p class="text-gray-100 text-sm">
+            <%= pengadaan.metode %>
+          </p>
         </div>
         <div>
           <p class="text-gray-400 text-xs mb-1">Jenis Pengadaan</p>
-          <p class="text-gray-100 text-sm"><%= pengadaan.jenis_pengadaan %></p>
+          <p class="text-gray-100 text-sm">
+            <%= pengadaan.jenis_pengadaan %>
+          </p>
         </div>
         <div>
           <p class="text-gray-400 text-xs mb-1">K/L/PD</p>
-          <p class="text-gray-100 text-sm"><%= pengadaan.klpd %></p>
+          <p class="text-gray-100 text-sm">
+            <%= pengadaan.klpd %>
+          </p>
         </div>
         <div>
           <p class="text-gray-400 text-xs mb-1">Satuan Kerja</p>
-          <p class="text-gray-100 text-sm"><%= pengadaan.satuan_kerja %></p>
+          <p class="text-gray-100 text-sm">
+            <%= pengadaan.satuan_kerja %>
+          </p>
         </div>
         <div>
           <p class="text-gray-400 text-xs mb-1">Lokasi</p>
-          <p class="text-gray-100 text-sm"><%= pengadaan.lokasi %></p>
+          <p class="text-gray-100 text-sm">
+            <%= pengadaan.lokasi %>
+          </p>
         </div>
         <div>
           <p class="text-gray-400 text-xs mb-1">Pemilihan</p>
-          <p class="text-gray-100 text-sm"><%= pengadaan.pemilihan %></p>
+          <p class="text-gray-100 text-sm">
+            <%= pengadaan.pemilihan %>
+          </p>
         </div>
         <div>
           <p class="text-gray-400 text-xs mb-1">SIRUP ID</p>
-          <p class="text-gray-100 text-sm"><%= pengadaan.sirup_id %></p>
+          <p class="text-gray-100 text-sm">
+            <%= pengadaan.sirup_id %>
+          </p>
         </div>
       </div>
     </div>
 
     <!-- section analisis AI -->
+    <!-- section analisis AI -->
     <div class="bg-gray-900 border border-gray-800 rounded-xl p-4 md:p-6">
       <div class="flex items-center justify-between mb-4">
         <h2 class="font-semibold text-gray-100 text-sm md:text-base">Analisis AI</h2>
         <% if (!analisis) { %>
-        <button id="btnAnalisis"
-          onclick="jalankanAnalisis('<%= pengadaan.id %>')"
-          class="px-3 md:px-4 py-1.5 md:py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs md:text-sm font-medium transition-colors">
-          Jalankan Analisis
-        </button>
-        <% } %>
+          <button id="btnAnalisis" onclick="jalankanAnalisis('<%= pengadaan.id %>')"
+            class="px-3 md:px-4 py-1.5 md:py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs md:text-sm font-medium transition-colors">
+            Jalankan Analisis
+          </button>
+          <% } %>
       </div>
 
       <% if (analisis) { %>
-        <div class="mb-3">
+        <div class="mb-3 flex items-center justify-between">
           <span class="px-3 py-1 rounded-full text-xs font-semibold
-            <%= analisis.status === 'normal' ? 'bg-green-900 text-green-300' :
-                analisis.status === 'perlu_perhatian' ? 'bg-yellow-900 text-yellow-300' :
-                'bg-red-900 text-red-300' %>">
-            <%= analisis.status.replace('_', ' ').toUpperCase() %>
+        <%= analisis.status === 'normal' ? 'bg-green-900 text-green-300' :
+            analisis.status === 'perlu_perhatian' ? 'bg-yellow-900 text-yellow-300' :
+            'bg-red-900 text-red-300' %>">
+            <%= analisis.status.replace('_', ' ' ).toUpperCase() %>
           </span>
+          <button id="btnAnalisis" onclick="jalankanAnalisis('<%= pengadaan.id %>')"
+            class="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-xs font-medium transition-colors">
+            Analisis Ulang
+          </button>
         </div>
-        <p class="text-gray-300 text-sm leading-relaxed"><%= analisis.insight %></p>
+        <p id="statusAnalisis" class="text-gray-300 text-sm leading-relaxed">
+          <%= analisis.insight %>
+        </p>
         <p class="text-gray-600 text-xs mt-4">
           Dianalisis: <%= new Date(analisis.analyzed_at).toLocaleString('id-ID') %>
         </p>
-      <% } else { %>
-        <div id="statusAnalisis" class="text-gray-500 text-sm">
-          Belum dianalisis. Klik tombol untuk menjalankan analisis AI.
-        </div>
-      <% } %>
+        <% } else { %>
+          <div id="statusAnalisis" class="text-gray-500 text-sm">
+            Belum dianalisis. Klik tombol untuk menjalankan analisis AI.
+          </div>
+          <% } %>
     </div>
 
   </main>
@@ -126,4 +150,5 @@
   </script>
 
 </body>
+
 </html>
