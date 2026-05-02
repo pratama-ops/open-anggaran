@@ -1,3 +1,38 @@
+# Open Anggaran
+
+Aplikasi berbasis AI untuk menganalisis dan memvisualisasikan data pengadaan barang pemerintah dari SiRUP LKPP. Dirancang untuk membantu masyarakat memahami pola harga pengadaan secara objektif — bukan menuduh, tapi memberi insight.
+
+## Fitur
+
+- **Dashboard Pengadaan** — tampilkan data paket pengadaan barang dari SiRUP LKPP lengkap dengan pagination
+- **Halaman Detail** — lihat informasi lengkap per paket pengadaan
+- **Analisis AI** — deteksi anomali harga menggunakan AI, memberi label `normal`, `perlu_perhatian`, atau `anomali` berdasarkan perbandingan dengan paket sejenis
+
+## Tech Stack
+
+- **Runtime** — Node.js
+- **Framework** — Express.js
+- **Template Engine** — EJS
+- **Database** — PostgreSQL
+- **AI** — Groq API (via fetch)
+- **Styling** — Tailwind CSS (CDN)
+
+## Struktur Folder
+open-anggaran/
+├── config/
+│   └── database.js       # koneksi PostgreSQL
+├── src/
+│   ├── controllers/      # logic request & response
+│   ├── models/           # query ke database
+│   ├── routes/           # definisi route
+│   └── services/         # import CSV & komunikasi AI
+├── views/                # template EJS
+│   └── partials/
+├── public/               # file statis (CSS, JS)
+├── data/                 # file Excel SiRUP
+├── agent.js              # AI agent — analisis anomali harga
+└── app.js                # entry point
+
 ## Cara Pakai
 
 ### 1. Clone & Install
