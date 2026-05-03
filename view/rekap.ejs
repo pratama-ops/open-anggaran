@@ -25,31 +25,31 @@
     <div class="grid grid-cols-3 gap-3 mb-6">
       <div class="bg-gray-900 border border-gray-800 rounded-xl p-4">
         <p class="text-gray-400 text-xs mb-1">Total Dianalisis</p>
-        <p class="text-xl font-bold text-white"><%= data.length %></p>
+        <p class="text-xl font-bold text-white"><%= result.length %></p>
       </div>
       <div class="bg-gray-900 border border-gray-800 rounded-xl p-4">
         <p class="text-gray-400 text-xs mb-1">Perlu Perhatian</p>
         <p class="text-xl font-bold text-yellow-400">
-          <%= data.filter(d => d.status === 'perlu_perhatian').length %>
+          <%= result.filter(d => d.status === 'perlu_perhatian').length %>
         </p>
       </div>
       <div class="bg-gray-900 border border-gray-800 rounded-xl p-4">
         <p class="text-gray-400 text-xs mb-1">Anomali</p>
         <p class="text-xl font-bold text-red-400">
-          <%= data.filter(d => d.status === 'anomali').length %>
+          <%= result.filter(d => d.status === 'anomali').length %>
         </p>
       </div>
     </div>
 
     <!-- list hasil analisis -->
     <div class="space-y-3">
-      <% if (data.length === 0) { %>
+      <% if (result.length === 0) { %>
         <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 text-center text-gray-500 text-sm">
           Belum ada paket yang dianalisis.
         </div>
       <% } %>
 
-      <% data.forEach(item => { %>
+      <% result.forEach(item => { %>
       <a href="/pengadaan/<%= item.pengadaan_id %>"
          class="block bg-gray-900 border border-gray-800 rounded-xl p-4 hover:bg-gray-800 transition-colors">
         <div class="flex items-start justify-between gap-3 mb-2">
