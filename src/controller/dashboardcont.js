@@ -1,4 +1,5 @@
 const dashboardMod = require('../model/dashboardmod');
+const analisisMod = require('../model/analisis');
 
 const dashboardCont = {
     //ambil semua data yg dibutuhkan lalu kirim ke view
@@ -28,6 +29,16 @@ const dashboardCont = {
         } catch (err) {
             console.error(err);
             res.status(500).send('Terjadi kesalahan server');
+        }
+    },
+
+    rekap: async (req, res) => {
+        try {
+            const result = await analisisMod.getRekap()
+            res.render('rekapitulasi', { result });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Terjadi kesalahan server!');
         }
     },
 };
