@@ -35,7 +35,7 @@ const dashboardCont = {
     rekap: async (req, res) => {
         try {
             const result = await analisisMod.getRekap()
-            res.render('rekapitulasi', { result });
+            res.render('rekap', { result });
         } catch (err) {
             console.error(err);
             res.status(500).send('Terjadi kesalahan server!');
